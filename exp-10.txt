@@ -1,0 +1,37 @@
+AIM :
+Write a MATLAB program to design the digital Butterworth filter that meets the following specifications:
+i.	1-dB ripple in the passband 0≤w≤0.3Π
+ii.	Atleast 40 dB attenuation in the stopband 0.8Π≤w≤Π
+Use bilinear transformation method. Assume T = 1.
+
+
+THEORY:
+The Butterworth filter is a type of signal processing filter designed to have a frequency response as flat as possible in the passband. It is also referred to as a maximally flat magnitude filter. It was first described in 1930 by the British engineer and physicist Stephen Butterworth in his paper.
+
+
+CODE
+clc;
+clear all;
+close all;
+T=1;
+AP=1;
+AS=40;
+wp=0.3*pi;
+ws=0.8*pi;
+WP=(2/T)*tan(wp/2);
+WS=(2/T)*tan(ws/2);
+r1=(10^(AP/10)-1)/(10^(AS/10)-1);
+r2=WP/WS;
+N=ceil(log10(r1)/log10(r2));
+WC=WP/((10^(AP/10)-1)^(1/(2*N)));
+[b,a]=butter(N,WC,'low','s');
+Hs=freqs(b,a);
+[numd,dend]=bilinear(b,a,1/T);
+Hz=freqs(numd,dend,T);
+w=0:0.01:pi;
+Hw=freqz(numd,dend,w);
+subplot(121);
+plot(w,abs(Hw));
+subplot(122);
+plot(w,20*log10(abs(Hw)));
+ 

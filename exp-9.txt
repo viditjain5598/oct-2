@@ -1,0 +1,27 @@
+
+
+CODE
+	m=45;
+tau=(m-1)/2;
+n=0:m-1;
+hdn=2*(sin((pi/2)*(n-tau)).*sin((pi/2)*(n-tau)))./((n-tau)*pi);
+hdn(tau+1)=0;
+wn=hamming(m);
+hn=zeros(1,length(hdn));
+for i=1:length(hdn)
+    hn(i)=hdn(i)*wn(i);
+end
+plot(n,hn);
+w=-pi:0.01:pi
+hw=zeros(1,length(w));
+for i=1:length(w)
+    for j=1:length(hn)
+        hw(i)=hw(i)+hn(j)*exp(-sqrt(-1)*w(i)*(j-1-tau));
+    end
+ 
+end
+subplot(211);
+stem(n,hdn);
+subplot(212);
+plot(w,angle(hw));
+plot(w,abs(hw));

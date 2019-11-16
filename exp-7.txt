@@ -1,0 +1,32 @@
+AIM :
+Design an FIR filter to meet the following specifications: passband edge Fp = 2 KHz, stopband edge Fs = 5 KHz. Passband attenuation Ap = 2 dB, Stopband attenuation As = 42 dB, and Sampling frequency FT = 20 KHz. Determine the impulse response and provide a plot of the frequency response of the designed filter
+
+CODE
+ap=2;
+as=42;
+fp=2000;
+fs=5000;
+ft=20000;
+wp=2*pi*fp/ft;
+ws=2*pi*fs/ft;
+wc=0.5*(wp+ws);
+delw=ws-wp;
+m=6.2*pi/delw;
+m=23;
+n=0:m-1;
+tau=(m-1)/2;
+hdn=sin(wc*(n-tau))./(pi*(n-tau));
+hdn(tau+1)=0.35;
+wn=hann(m);
+hn=zeros(1,length(hdn));
+for i=1:1:length(hdn)
+    hn(i)=hdn(i)*wn(i);
+end
+w=-pi:0.01:pi;
+hw=freqz(hn,1,w);
+dbres=zeros(1,length(w));
+dbres=20*log10(hw/max(hw));
+subplot(211);
+plot(w,abs(hw));
+subplot(212)
+plot(w,dbres);

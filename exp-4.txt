@@ -1,0 +1,87 @@
+AIM: The impulse response of LTI system is h(n)={1,0,-1}. Write a MATLAB program to compute the response of the system if the input is x(n)=(n+1),0 ≤ n ≤ 9.
+a) Use overlap-save method. Let the length of each section is N=6
+b) Use overlap-add method. Let the length of each section is N=4.
+
+
+MATLAB Code: 
+A)
+M	=	3;
+Hn	=	[1,0,-1];
+N	=	10;
+n	=	0:1:9;
+xn	=	n+1;
+l_s	=	6;%length of section
+xnS	=	[zeros(1,M-1) xn];%appending M-1 zeros to input;
+num_s=	length(xnS)/(l_s-M+1);
+xnS	=	[xnS zeros(1,M-1)];
+h_n	=	[hn zeros(1,l_s-M)];%appending zeros in hn so that length of hn is 6
+y_n	=	zeros(num_s,l_s);
+k	=	0:5;
+%circular convoltuion
+hn_shift=zeros(l_s);
+for i = 1:num_s
+j=(i-1)*4 +1;
+sec_s=[xnS(j:j+5)];
+for m=0:l_s-1
+n2_=mod(k-m,l_s);
+hn_shift(m+1,:)=h_n(n2_+1);
+end
+y_n(i,:)=sec_s*hn_shift;
+end
+yn=zeros(1,N+M-1);
+for z=1:num_s
+j=(z-1)*4+1;
+yn(j:j+3)=y_n(z,M:l_s);
+end
+u=2;v=2;
+subplot(u,v,1)
+stem(xn,'filled','black','Linewidth',2);
+title('Input signal x(n)');
+grid on;
+subplot(u,v,2)
+stem(hn,'black','filled','Linewidth',2);
+title('Impulse response h(n)');
+grid on;
+subplot(u,v,3)
+stem(yn,'black','filled','Linewidth',2);
+title('Convolved output using Overlap and save');
+grid on;
+
+B)
+hn	=	[1,0,-1];
+M	=	3;
+N	=	10;
+n	=	0:1:9;
+xn	=	n+1;
+%overlap add method
+l_s	=	4;%length of section
+num_s=	ceil(N/l_s);
+T 	= 	l_s+M-1;%total samples in one section
+h_n	=	[hn zeros(1,l_s-1)];%appending zeros so that length of hn is 6 for linear convo
+y_n	=	zeros(num_s,T);
+xnA	=	[xn zeros(1,M-1)];
+k	=	0:5;
+%circular convoltuion
+hn_shift=zeros(T);
+for i = 1:num_s
+j=(i-1)*4 +1;
+sec_s=[xnA(j:j+3) zeros(1,M-1)];
+for m=0:T-1
+n2_=mod(k-m,T);
+hn_shift(m+1,:)=h_n(n2_+1);
+end
+y_n(i,:)=sec_s*hn_shift;
+end
+yn=zeros(1,N+M-1);
+yn(1:l_s) = y_n(1,1:l_s);
+for z=2:num_s
+j=(z-1)*4+1;
+for w=1:M-1
+y_n(z,w)=y_n(z,w)+y_n(z-1,T-M+w+1);
+end
+yn(j:j+3)=y_n(z,1:l_s);
+end
+stem(yn,'black','filled','Linewidth',2);
+ title('Convolved output using Overlap and add');
+ grid on;
+

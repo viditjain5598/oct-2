@@ -1,0 +1,29 @@
+Aim: Let x(t) = sin(2Π697t) + sin(2Π1209t), sampled at the rate of fs=8000Hz to get a discrete-time signal x(n). Compute theDFT coefficient X(k) at the frequency bin k = 18,20,22,24,31,34,38 using Goertzel algorithm and detect which key of touch-tone pad is pressed.
+
+
+
+Code:
+N = 205;
+n = 0:N-1;
+k = [18 20 22 24 31 34 38];
+xn = sin(2*pi*697*n /8000)+ sin(2*pi*1209*n / 8000);
+W =  exp(-j *2*pi*k/N);
+xz = xn;
+vk = zeros(7,N);   den = zeros(7,3);
+Xk = zeros(7,1);
+for i=1:7
+    den(i,:) = [1 -2*cos(2*pi*k(i)/N) 1];
+    vk(i,:) = filter (1,den(i,:),xz);
+    Xk(i)= vk(i,N) - W(i)*vk(i,N-1);
+end
+subplot(2,2,1);
+stem(n,xn,'black','filled','linewidth',1);
+xlabel('n');
+ylabel('x(n)');
+title('Input signal');
+subplot(2,2,2);
+stem(k,abs(Xk),'filled','black','linewidth',2);
+xlabel('k');
+ylabel('|X(k)|');
+title('DFT at k=18,20,22,24,31,34,38');
+

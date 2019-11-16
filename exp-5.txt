@@ -1,0 +1,41 @@
+Aim: Consider the sequence
+		x(n)=cos(0.48Πn) + cos(0.52Πn)
+i)Determine and plot the 100-point DFT of x(n), 0n10. Pad 90 zeros after the signal.
+ii) Determine and plot the 100-point DFT of x(n), 0n100.
+
+Theory:
+In the zero padded signal the signal is very less described in the 10 samples, so the DFT doesn’t corresponds to a single value frequency as there are only two frequency components present in the signal.
+But in the next signal there are enough samples to make out the frequency components by plotting out its DFT.
+So it can be observed that increasing the number of points in a signal can help in calculating the fourier transform more clearly and correctly.
+
+CODE
+1.	%  n=0:10;
+n=0:100;
+xn=cos(0.48*pi*n)+ cos(0.52*pi*n);
+ 
+% xn=[xn zeros(1,90)];
+k=0:100;
+N=100;
+xk=zeros(1,length(k));
+for i=1:length(k)
+    for j=1:length(xn)
+        xk(i)=xk(i)+xn(j)*exp(-sqrt(-1)*(2*pi/N)*(i-1)*(j-1));
+    end
+end
+stem(k,xk);
+
+2.	n=0:10;
+% n=0:100;
+xn=cos(0.48*pi*n)+ cos(0.52*pi*n);
+ 
+xn=[xn zeros(1,90)];
+k=0:100;
+N=100;
+xk=zeros(1,length(k));
+for i=1:length(k)
+    for j=1:length(xn)
+        xk(i)=xk(i)+xn(j)*exp(-sqrt(-1)*(2*pi/N)*(i-1)*(j-1));
+    end
+end
+stem(k,xk);
+

@@ -1,0 +1,34 @@
+AIM :
+Design a length-21 digital differentiator using a hamming window.
+Hd(ejw) = jwe-jαw , 0<w<Π
+            -jwe-jαw , - Π<w<0
+
+THEORY:
+A differentiator has an amplitude response proportional to the frequency.
+
+          
+
+CODE
+m=21;
+tau=(m-1)/2;
+n=0:m-1;
+hdn=(cos(pi*(n-tau))./(n-tau) - sin(pi*(n-tau))./(pi*(n-tau).*(n-tau)));
+hdn(tau+1)=0;
+wn=hamming(m);
+hn=zeros(1,length(hdn));
+for i=1:length(hdn)
+    hn(i)=hdn(i)*wn(i);
+end
+w=-pi:0.01:pi
+hw=zeros(1,length(w));
+for i=1:length(w)
+    for j=1:length(hn)
+        hw(i)=hw(i)+hn(j)*exp(-sqrt(-1)*w(i)*(j-1-tau));
+    end
+end
+% hw=freqz(hn,1,w);
+subplot(211);
+stem(n,hdn);
+subplot(212);
+plot(w,abs(hw));
+% plot(w,angle(hw));

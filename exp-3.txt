@@ -1,0 +1,25 @@
+AIM: Let  x1(n)={1,2,2}  and x2(n)={1,2,3,4}
+A.	Write a matlab program to compute the 4-point circular convolution x1(n)*x2(n).
+B.	Write a matlab program to compute their linear convolution using circular convolution
+
+CODE
+clear all;
+close all;
+xn1=[1 2 2];
+xn2=[1 2 3 4];
+N=7;
+xc=cconv(xn1,xn2);
+xn1=[xn1 zeros(1,(N-length(xn1)))];
+xn2=[xn2 zeros(1,(N-length(xn2)))];
+for n=0:N-1
+    m=0:N-1;
+    n1=mod(n-m,N);
+    xs2=xn2(n1+1);
+    x12=xn1.*xs2;
+    y(n+1)=sum(x12);
+end
+subplot(121);
+stem(xc);
+subplot(122);
+stem(y);
+

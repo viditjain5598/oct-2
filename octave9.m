@@ -1,0 +1,20 @@
+clc;
+close all;
+clear all;
+T=1;
+wp=0.3*pi;
+ws=0.8*pi;
+Wp= (2/T)*tan(wp/2);
+Ws= (2/T)*tan(ws/2);
+ap=1;
+as=40;
+r=(10.^(0.1*ap)-1)./(10.^(0.1*as)-1);
+N=ceil((0.5*log10(r))/(log10(Wp/Ws)));
+wc=Wp/((10.^(0.1*ap)-1).^(1/(2*N)));
+[b,a]=butter(N,wc,'low','s');
+hs=tf(b,a);
+[numd,dend]=bilinear(b,a,1/T);
+hz=tf(numd,dend,T);
+w=0:0.01:pi;
+hw=freqz(numd,dend,w);
+plot(w,abs(hw))

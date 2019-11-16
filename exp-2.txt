@@ -1,0 +1,63 @@
+AIM :
+(a).Let x(n) be a 4-point sequence:
+     x(n) = (1 ; 0<=n<=3
+                0 ; otherwise )
+(i). Compute DTFT X(e^jw) and plot its magnitude and phase.
+(ii).Compute 4-point, 8-point, 16-point DFT of x(n).F
+
+
+
+CODE
+n=0:3;
+xn=ones(1,length(n));
+w=0:0.01:2*pi;
+xw=zeros(1,length(w));
+for i=1:length(w)
+    for j=1:length(xn)
+        xw(i)=xw(i)+xn(j)*exp(-sqrt(-1)*w(i)*(j-1));
+    end
+end
+subplot(221)
+plot(w,xw);
+ 
+% 4 POINT DFT
+N=4;
+k=0:N-1;
+xk=zeros(1,length(k));
+for i=1:length(k)
+    for j=1:length(xn)
+        xk(i)=xk(i)+xn(j)*exp(-sqrt(-1)*(2*pi/N)*(j-1)*(i-1));
+    end    
+end
+subplot(222);
+stem(k,(xk));
+ 
+% 8 POINT DFT
+N=8;
+k=0:N-1;
+xn=[ones(1,4) zeros(1,4)];
+xk=zeros(1,length(k));
+for i=1:length(k)
+    for j=1:length(xn)
+        xk(i)=xk(i)+xn(j)*exp(-sqrt(-1)*(2*pi/N)*(j-1)*(i-1));
+    end    
+end
+subplot(223);
+stem(k,(xk));
+ 
+% 16 POINT DFT
+N=16;
+k=0:N-1;
+xn=[ones(1,4) zeros(1,12)];
+xk=zeros(1,length(k));
+for i=1:length(k)
+    for j=1:length(xn)
+        xk(i)=xk(i)+xn(j)*exp(-sqrt(-1)*(2*pi/N)*(j-1)*(i-1));
+    end    
+end
+subplot(224);
+stem(k,(xk));
+
+
+
+ 

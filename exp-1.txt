@@ -1,0 +1,34 @@
+AIM: An LTI system is specified by the difference equation y(n)=0.9y(n-1) + x(n)
+(a) Plot |H(e^jw)| and arg(H(e^jw)).
+(b) Calculate and plot the steady-state response ys(n) to x(n)=cos(0.05*pi*n)u(n).
+
+
+n=0:1:100;
+w=-2*pi:0.01:2*pi;
+hw=1./(1-0.9*exp(-sqrt(-1)*w));
+xn=cos(0.05*pi*n);
+xw=zeros(1,length(w));
+for i=1:1:length(w)
+    for j=1:1:length(xn)
+        xw(i)=xw(i)+xn(j)*exp(-sqrt(-1)*w(i)*(j-1));
+    end
+end
+yw=zeros(1,length(w));
+for i=1:1:length(w)
+    yw(i)=xw(i)*hw(i);
+end
+plot(w,yw);
+yn=zeros(1,length(n));
+for i=1:1:length(n)
+        for j=1:1:length(w)
+            yn(i)=yn(i)+yw(j)*exp(sqrt(-1)*w(j)*(i-1));
+        end
+end
+subplot(221)
+plot(w,abs(hw));
+subplot(222)
+plot(w,angle(hw));
+subplot(223)
+plot(n,xn);
+subplot(224)
+plot(n,yn);

@@ -1,0 +1,12 @@
+clc;
+close all;
+clear all;
+N=100;
+n=0:N-1;
+k=0:N-1;
+xw=exp(-j*2*pi/N*n'*k);
+m=0:9;
+vec=cos(0.48*pi*m)+cos(0.52*pi*m);
+vect=[vec,zeros(1,90)];
+xk=vect*xw;
+stem(k,abs(xk),'filled');
